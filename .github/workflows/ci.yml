@@ -1,0 +1,36 @@
+name: Validar cliente de secretos
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Validar Conventional Commits
+        shell: bash
+        run: |
+          FROM="${{ github.event.pull_request.base.sha || github.event.before }}"
+          TO="${{ github.event.pull_request.head.sha || github.sha }}"
+          ZERO_SHA="0000000000000000000000000000000000000000"
+          if [ -z "$FROM" ] || [ "$FROM" = "$ZERO_SHA" ]; then
+            git log -1 --format=%B "$TO" | npx --no-install commitlint --config commitlint.config.mjs
+          else
+            npx --no-install commitlint --config commitlint.config.mjs --from "$FROM" --to "$TO" --verbose
+          fi
+      - run: npm test
+      - run: npm audit --omit=dev --omit=optional
+      - run: npm pack --dry-run
