@@ -16,6 +16,7 @@ Requiere `SECRETS_ADAPTER_URL` y `SECRETS_TOKEN`, o las opciones equivalentes en
 npm test
 ```
 
-La publicación se realiza en npm mediante releases semánticos desde `main`.
+La publicación pública en npm se realiza mediante releases semánticos desde
+`main`.
 El alcance se gobierna en `bigso-governance`, Change `CHG-2026-0029`. No
 integra ni configura `erp-core`.
