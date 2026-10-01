@@ -1,6 +1,6 @@
 {
   "name": "@bigso/secrets",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cliente Node.js para BIGSO Secrets Adapter.",
   "type": "module",
   "exports": "./src/index.js",
